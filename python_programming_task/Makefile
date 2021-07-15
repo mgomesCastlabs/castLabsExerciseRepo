@@ -6,7 +6,7 @@ UNAME      ?= ${shell uname -s}
 
 NAME_PREFIX = python_programming_task_
 PROXY_NAME = ${NAME_PREFIX}proxy_1
-
+HTTP_PORT = 8080
 
 down :
 	docker-compose down
@@ -24,6 +24,14 @@ wait :
 	sleep 1
 
 build : down clean
+	-mv docker-compose.yml.bu docker-compose.yml
+	-mv proxy/Dockerfile.bu proxy/Dockerfile
+	-mv proxy/main.py.bu proxy/main.py
+	-mv proxy/tester.py.bu proxy/tester.py
+	sed -i.bu 's/8080/${HTTP_PORT}/g' docker-compose.yml
+	sed -i.bu 's/EXPOSE 8080/EXPOSE ${HTTP_PORT}/' proxy/Dockerfile
+	sed -i.bu 's/LISTEN_PORT = 8080/LISTEN_PORT = ${HTTP_PORT}/' proxy/main.py
+	sed -i.bu 's/http:\/\/127.0.0.1:8080/http:\/\/127.0.0.1:${HTTP_PORT}/' proxy/tester.py
 	docker-compose build
 
 up:
@@ -43,6 +51,6 @@ test :
 
 status :
 	echo "\n"
-	curl 'http://localhost:8080/status'
+	curl 'http://localhost:${HTTP_PORT}/status'
 
 all :	build up wait test wait status 
