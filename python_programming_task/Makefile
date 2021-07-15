@@ -26,8 +26,10 @@ wait :
 build : down clean
 	docker-compose build
 
-up :
+up:
 	docker-compose up -d
+
+run:	up
 
 stop :
 	docker-compose stop
