@@ -1,0 +1,3 @@
+#required
+pyjwt==2.1.0
+aiohttp==3.7.4.post0

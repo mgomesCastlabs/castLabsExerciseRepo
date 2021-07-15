@@ -1,0 +1,2 @@
+# remove base JWT package included with python 3.9
+JWT
