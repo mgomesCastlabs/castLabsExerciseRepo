@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 import jwt
 import json
+import time
 
 import asyncio
 import aiohttp
@@ -26,7 +27,7 @@ logger = logging.getLogger("runproxy")
 
 async def issueJwt(username):
     
-    iat = str(datetime.utcnow())
+    iat = str(int(time.time()))
     jti = str(uuid.uuid4())
     payload = {"username": username, "date": datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")}
     jwtRawPayload = { "iat": iat, "jti": jti, "payload": payload}
@@ -54,7 +55,7 @@ async def handleProxy(request):
     global proxiedPostCount 
 
     data = await request.read()
-    
+
     if len(request.query_string) > 0:
         queryParams="?"+request.query_string
     else:
